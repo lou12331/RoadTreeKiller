@@ -36,6 +36,7 @@ export class GameScene {
   private slots: TreeSlot[] = [];
   private behind: (TreeSlot & { base: number })[] = []; // 已經過鏡頭、仍在倒下的樹
   private fellCooldown = 0;
+  speedFactor = 0; // 0..1，高速砍伐時的前進速度
   private stumps: THREE.InstancedMesh;
   private axe = buildAxe();
   private axeT = 1;
@@ -304,6 +305,7 @@ export class GameScene {
     }
     this.fellCooldown -= dt;
 
+    this.speedFactor = 0;
     if (this.mode !== 'ending') {
       const backlog = this.targetIndex - this.visualIndex;
       // 捲動速度隨落後量提升，上限每秒 15 棵
@@ -325,6 +327,9 @@ export class GameScene {
       // 目前這棵倒下過半才前進；落後多棵時不等待
       const head = this.slots[0];
       const go = backlog > 1 || (backlog === 1 && head.fallT >= head.dur * 0.6);
+      // 速度線強度：一般前進為 0，達到上限速度為 1
+      const base = SPACING / 0.55;
+      this.speedFactor = go ? Math.min(1, Math.sqrt(Math.max(0, speed / base - 1) / (SPACING * 15 / base - 1))) : 0;
       if (go) {
         this.scroll += speed * dt;
         while (this.scroll >= SPACING && this.visualIndex < this.targetIndex) {
@@ -389,6 +394,12 @@ export class GameScene {
       this.chips.setMatrixAt(i, this.tmpM);
     }
     this.chips.instanceMatrix.needsUpdate = true;
+  }
+
+  /** 街道盡頭（消失點）的螢幕座標，速度線由此放射。 */
+  vanishingPoint(): { x: number; y: number } {
+    const v = this.tmpV.set(0.5, 2, -120).project(this.camera);
+    return { x: ((v.x + 1) / 2) * this.width, y: ((1 - v.y) / 2) * this.height };
   }
 
   /** 目前樹幹受擊點的螢幕座標（CSS px，相對容器）。 */

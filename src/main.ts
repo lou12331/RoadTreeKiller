@@ -10,11 +10,13 @@ import { setSound, sfx, unlockAudio } from './ui/audio';
 import { fmt, fmtInt } from './ui/format';
 import { UIController } from './ui/ui';
 import { Danmaku } from './ui/danmaku';
+import { SpeedLines } from './ui/speedlines';
 
 let state: GameState = newState();
 const scene = new GameScene(document.getElementById('stage')!);
 const stageEl = document.getElementById('stage')!;
 const danmaku = new Danmaku(stageEl);
+const speedLines = new SpeedLines(stageEl);
 
 // 每秒砍伐數（滑動平均）
 const killLog: { t: number; n: number }[] = [];
@@ -161,6 +163,7 @@ function frame(now: number) {
   }
 
   scene.update(dt, { equipment: state.equipment, dps: ending ? 0 : totalDps(state) });
+  speedLines.update(dt, scene.speedFactor, scene.vanishingPoint());
   ui.update(state);
   if (now - lastRows > 100) { ui.refreshRows(); lastRows = now; }
   if (now - lastSave > 15000) { lastSave = now; void saveGame(state); }

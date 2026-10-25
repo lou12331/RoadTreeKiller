@@ -6,6 +6,8 @@ import type { GameState, Quality } from '../core/state';
 import { generateTree } from '../core/trees';
 import { fmt, fmtDuration, fmtInt } from './format';
 import briefingImg from '../assets/briefing.webp';
+import logoImg from '../assets/logo.webp';
+import avatarImg from '../assets/avatar.webp';
 
 type Tab = 'axe' | 'equip' | 'special' | 'achieve';
 type Qty = 1 | 10 | 100 | 'max';
@@ -123,6 +125,8 @@ export class UIController {
     let startT = 0;
     let dragging = false;
     let moved = false;
+    let justDragged = false;
+    let downTarget: HTMLElement | null = null;
     const range = () => sheet.offsetHeight - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sheet-h')) / 100) * window.innerHeight;
     const onDown = (e: PointerEvent) => {
       if (window.matchMedia('(min-width: 900px) and (min-aspect-ratio: 1/1)').matches) return;
@@ -130,12 +134,16 @@ export class UIController {
       moved = false;
       startY = e.clientY;
       startT = sheet.classList.contains('expanded') ? 0 : range();
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      downTarget = e.currentTarget as HTMLElement;
     };
     const onMove = (e: PointerEvent) => {
       if (!dragging) return;
       const dy = e.clientY - startY;
-      if (Math.abs(dy) > 6) moved = true;
+      if (!moved && Math.abs(dy) > 6) {
+        moved = true;
+        // 確定是拖曳才擷取指標；點擊時若先擷取，click 會落在分頁列而非按鈕上
+        try { downTarget?.setPointerCapture(e.pointerId); } catch { /* 指標已釋放 */ }
+      }
       if (!moved) return;
       sheet.classList.add('dragging');
       const t = Math.min(range(), Math.max(0, startT + dy));
@@ -147,18 +155,23 @@ export class UIController {
       sheet.classList.remove('dragging');
       sheet.style.transform = '';
       const dy = e.clientY - startY;
-      if (!moved) {
-        if (e.currentTarget === handle) sheet.classList.toggle('expanded');
+      if (!moved && Math.abs(dy) <= 6) {
+        if (downTarget === handle) sheet.classList.toggle('expanded');
         return;
       }
+      // 拖曳結束後吞掉接著觸發的 click，避免誤切分頁
+      justDragged = true;
+      setTimeout(() => { justDragged = false; }, 0);
       sheet.classList.toggle('expanded', dy < 0 ? true : dy > 0 ? false : sheet.classList.contains('expanded'));
     };
-    for (const t of [handle, $('tabs')]) {
-      t.addEventListener('pointerdown', onDown);
-      t.addEventListener('pointermove', onMove);
-      t.addEventListener('pointerup', onUp);
-      t.addEventListener('pointercancel', onUp);
-    }
+    $('tabs').addEventListener('click', (e) => {
+      if (justDragged) e.stopImmediatePropagation();
+    }, true);
+    for (const t of [handle, $('tabs')]) t.addEventListener('pointerdown', onDown);
+    // 移動與放開掛在 window：手指滑出分頁列後仍能追蹤
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
   }
 
   // ---------- 每幀更新 ----------
@@ -287,7 +300,7 @@ export class UIController {
       list.append(row);
       this.rows.push(b);
       list.append(el('div', 'section-title', '提示'));
-      list.append(el('div', 'row', `<div class="ico">💡</div><div class="info"><div class="desc">斧頭每升一級 +1 手動傷害。購買「設備」可以在你不點擊時持續砍樹，離線時也會以 50% 效率運作（最長 8 小時）。<br>桌面版可按 <b>空白鍵</b> 或 <b>A–Z</b> 任一字母鍵砍伐。</div></div>`));
+      list.append(el('div', 'row', `<div class="ico">💡</div><div class="info"><div class="desc">斧頭每升一級 +1 手動傷害。購買「設備」可以在你不點擊時持續砍樹，離線時也會以 50% 效率運作（最長 8 小時）。<span class="desktop-only"><br>桌面版可按 <b>空白鍵</b> 或 <b>A–Z</b> 任一字母鍵砍伐。</span></div></div>`));
     }
 
     if (this.tab === 'equip') {
@@ -397,6 +410,24 @@ export class UIController {
     $('overlay-root').innerHTML = '';
   }
 
+  openAbout() {
+    const o = this.overlay('', `
+      <div class="modal about" role="dialog" aria-label="關於作者" style="max-width:380px">
+        <h2>關於作者<button class="close" data-close aria-label="關閉">✕</button></h2>
+        <img class="avatar" src="${avatarImg}" alt="楓葉綠茶的頭像" draggable="false" />
+        <p class="author">作者：楓葉綠茶
+          <a class="fb-link" href="https://louiegreentea.tw" target="_blank" rel="noopener noreferrer" aria-label="楓葉綠茶的 Facebook">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1877F2"/><path fill="#fff" d="M15.12 12.75l.4-2.6h-2.5V8.46c0-.71.35-1.4 1.47-1.4h1.13V4.85s-1.03-.18-2.01-.18c-2.05 0-3.39 1.24-3.39 3.5v1.98H7.94v2.6h2.28V19a9.1 9.1 0 0 0 2.8 0v-6.25h2.1z"/></svg>
+          </a>
+        </p>
+        <p>聽說有人超奢侈的，可以給一個砍樹小遊戲專門開一場發布會。</p>
+        <p>不過話說回來，其實我對砍樹議題一點研究都沒有，做這款遊戲純粹只是覺得好玩。</p>
+        <p><b>要打就去 Game Jam 打啦！</b></p>
+      </div>`);
+    o.querySelector('[data-close]')!.addEventListener('click', () => o.remove());
+    o.addEventListener('click', (e) => { if (e.target === o) o.remove(); });
+  }
+
   /** 遊戲內確認視窗（瀏覽器原生 confirm() 在部分 WebView 會被封鎖）。 */
   confirm(title: string, text: string, okLabel: string): Promise<boolean> {
     return new Promise((resolve) => {
@@ -418,7 +449,10 @@ export class UIController {
   intro(text: string, ngPlus: number, onStart: () => void) {
     const o = this.overlay('clear', `
       <div class="intro-wrap">
-        <div class="title-logo">92,776<small>${ngPlus ? `第 ${ngPlus + 1} 輪 · ` : ''}</small></div>
+        <div class="title-logo">
+          <img src="${logoImg}" alt="92,776" draggable="false" />
+          ${ngPlus ? `<small>第 ${ngPlus + 1} 輪</small>` : ''}
+        </div>
         <img class="briefing-img" src="${briefingImg}" alt="" draggable="false" />
         <div class="dialog">
           <div class="kicker">任務簡報</div>
@@ -504,6 +538,7 @@ export class UIController {
         <div class="btn-row">
           <button class="btn" data-intro>重看開場</button>
           <button class="btn danger" data-reset>重置進度</button>
+          <button class="btn span-2" data-about>關於作者</button>
         </div>
       </div>`);
     const q = o.querySelector('[data-quality]')!;
@@ -549,6 +584,7 @@ export class UIController {
       if (f && this.h.importSave(await f.text())) o.remove();
     });
     o.querySelector('[data-intro]')!.addEventListener('click', () => { o.remove(); this.h.replayIntro(); });
+    o.querySelector('[data-about]')!.addEventListener('click', () => this.openAbout());
     o.querySelector('[data-reset]')!.addEventListener('click', async () => {
       const ok = await this.confirm('重置進度', '確定要重置所有進度嗎？成就也會一併清除，無法復原。', '確定重置');
       if (ok) { o.remove(); this.h.reset(); }
