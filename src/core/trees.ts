@@ -1,4 +1,4 @@
-import { HEALTH, HP_CURVE, SPECIES, STAGES, TIERS, type Species, type StageId } from './data';
+import { HEALTH, HP_CURVE, NO_GIANT_BEFORE, SPECIES, STAGES, TIERS, type Species, type StageId } from './data';
 
 /** 以 (seed, index, salt) 產生 [0,1) 的可重現亂數，不預先生成整條街的樹。 */
 export function hashRandom(seed: number, index: number, salt: number): number {
@@ -56,6 +56,7 @@ export function generateTree(seed: number, index: number): TreeInfo {
     acc += s.weight;
     if (r < acc) { stage = s; break; }
   }
+  if (stage.id === 'giant' && index < NO_GIANT_BEFORE) stage = STAGES.find((s) => s.id === 'mature')!;
   // 幼樹不套用健康倍率
   const healthy = stage.id === 'sapling' || hashRandom(seed, index, 3) < HEALTH.healthy.weight;
   const health = healthy ? HEALTH.healthy : HEALTH.unhealthy;

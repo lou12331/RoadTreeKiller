@@ -30,6 +30,7 @@ export const STAGES: { id: StageId; name: string; weight: number; hp: number; go
   { id: 'mature', name: '成樹', weight: 0.6, hp: 1.0, gold: 1.0 },
   { id: 'giant', name: '巨樹', weight: 0.1, hp: 5.0, gold: 6.0 },
 ];
+export const NO_GIANT_BEFORE = 100; // 開場前幾棵不出現巨樹（改為成樹）
 
 export const HEALTH = {
   healthy: { name: '健康', weight: 0.8, hp: 1.0, gold: 1.0 },

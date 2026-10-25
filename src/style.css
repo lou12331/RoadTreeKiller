@@ -541,6 +541,8 @@ body.intro #danmaku, body.ending #danmaku { display: none; }
   .qty { padding: 0 8px 6px; font-size: 12px; gap: 5px; }
   .qty button { padding: 3px 8px; min-width: 42px; font-size: 12px; }
   .list { padding: 0 8px 10px; }
+  /* 收合時抽屜下半部在畫面外：補上同等留白，讓內容少的分頁也能捲到最後一列 */
+  #sheet:not(.expanded) .list { padding-bottom: calc(86dvh - var(--sheet-h) + 10px); }
   .row { grid-template-columns: 40px 1fr auto; gap: 8px; padding: 5px 6px; margin-bottom: 6px; border-radius: 12px; }
   .row .ico { width: 40px; height: 40px; font-size: 22px; border-radius: 10px; }
   .row .name { font-size: 14px; }

@@ -2,12 +2,13 @@ import * as THREE from 'three';
 import type { Quality } from '../core/state';
 import { generateTree } from '../core/trees';
 import { TARGET_TREES } from '../core/data';
-import { GEO, buildAxe, buildEquipment, buildTree, mat } from './models';
+import { GEO, buildAxe, buildEquipment, buildTree, disposeTree, mat } from './models';
 
 const SPACING = 7; // 行道樹間距
-const LOOKAHEAD = 5; // 預覽後續幾棵樹
+const LOOKAHEAD = 50; // 預覽後續幾棵樹
 const STUMPS = 24;
-const STREET_LEN = 140; // 環境物件循環長度
+const CATCHUP = 1.2; // 落後很多棵時，鏡頭追上最新砍倒的樹所需秒數
+const STREET_LEN = 300; // 環境物件循環長度
 
 type Mode = 'intro' | 'play' | 'ending';
 
@@ -238,7 +239,10 @@ export class GameScene {
   syncTrees(seed: number, felled: number) {
     this.seed = seed;
     this.targetIndex = felled;
-    for (const sl of [...this.slots, ...this.behind]) this.world.remove(sl.g);
+    for (const sl of [...this.slots, ...this.behind]) {
+      this.world.remove(sl.g);
+      disposeTree(sl.g);
+    }
     this.behind = [];
     this.slots = [];
     this.visualIndex = felled;
@@ -300,6 +304,7 @@ export class GameScene {
       this.animateFall(b, dt);
       if (b.fallT > b.dur + 0.5 && b.base + this.scroll > 4) {
         this.world.remove(b.g);
+        disposeTree(b.g);
         this.behind.splice(i, 1);
       }
     }
@@ -308,8 +313,9 @@ export class GameScene {
     this.speedFactor = 0;
     if (this.mode !== 'ending') {
       const backlog = this.targetIndex - this.visualIndex;
-      // 捲動速度隨落後量提升，上限每秒 15 棵
-      const speed = Math.min(SPACING * 15, (SPACING / 0.55) * Math.max(1, backlog / 1.5));
+      // 捲動速度隨落後量提升，一般上限每秒 15 棵；落後太遠時再加速，約 CATCHUP 秒內追上
+      const cruise = Math.min(SPACING * 15, (SPACING / 0.55) * Math.max(1, backlog / 1.5));
+      const speed = Math.max(cruise, (backlog * SPACING) / CATCHUP);
       const dur = Math.min(0.9, (2.2 * SPACING) / speed);
 
       // 已被砍倒但還站著的樹：開始倒下
@@ -357,6 +363,7 @@ export class GameScene {
     this.slots.forEach((sl, k) => {
       if (this.visualIndex + k < this.targetIndex) return;
       this.world.remove(sl.g);
+      disposeTree(sl.g);
       this.slots[k] = this.makeSlot(this.visualIndex + k);
     });
   }
@@ -445,7 +452,7 @@ export class GameScene {
           const dir = target.sub(origin);
           (u.barrel as THREE.Object3D).rotation.z = Math.atan2(dir.y, Math.hypot(dir.x, dir.z));
           g.rotation.y = -Math.atan2(dir.z, dir.x);
-          beam.scale.set(dir.length(), 0.8 + Math.random() * 0.4 * k, 0.8 + Math.random() * 0.4 * k);
+          beam.scale.set(Math.max(0, dir.length() - beam.position.x), 0.8 + Math.random() * 0.4 * k, 0.8 + Math.random() * 0.4 * k);
           (beam.material as THREE.MeshBasicMaterial).opacity = 0.6 + Math.random() * 0.4;
           break;
         }
