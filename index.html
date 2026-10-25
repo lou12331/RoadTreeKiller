@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#1d2329" />
+    <meta name="description" content="92,776｜3D 網頁增量伐木遊戲" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪓</text></svg>" />
+    <title>92,776</title>
+  </head>
+  <body>
+    <div id="app">
+      <main id="stage">
+        <div id="fx" aria-hidden="true"></div>
+
+        <header id="hud">
+          <div class="panel hud-progress">
+            <div class="hud-icon">🌳</div>
+            <div class="hud-body">
+              <div class="hud-label">已砍伐 <span id="phase" class="phase"></span></div>
+              <div class="hud-value"><b id="felled">0</b><small> / 92,776</small></div>
+              <div class="bar"><i id="progress-bar"></i></div>
+            </div>
+          </div>
+          <div class="panel hud-gold">
+            <div class="hud-icon coin">🪙</div>
+            <div class="hud-body">
+              <div class="hud-label">金幣</div>
+              <div class="hud-value"><b id="gold">0</b></div>
+            </div>
+          </div>
+          <button id="btn-settings" class="panel icon-btn" aria-label="設定">⚙️</button>
+        </header>
+
+        <div id="tree-card" class="panel">
+          <div class="tree-title"><span id="tree-name">榕樹</span><span id="tree-index" class="muted"></span></div>
+          <div class="bar hp"><i id="hp-bar"></i></div>
+          <div id="hp-text" class="hp-text">0 / 0 HP</div>
+        </div>
+
+        <div id="chop-area">
+          <button id="chop" type="button"><span class="chop-icon">🪓</span>砍！</button>
+          <div id="stats" class="panel">
+            <div><span class="muted">每次點擊</span><b id="stat-click">1</b></div>
+            <div><span class="muted">自動傷害</span><b id="stat-dps">0 DPS</b></div>
+            <div><span class="muted">每秒砍伐</span><b id="stat-tps">0</b></div>
+          </div>
+        </div>
+      </main>
+
+      <section id="sheet" aria-label="商店">
+        <div id="sheet-handle" role="button" aria-label="展開或收合商店"><i></i></div>
+        <nav id="tabs" role="tablist">
+          <button role="tab" data-tab="axe" class="active">🛒 升級</button>
+          <button role="tab" data-tab="equip">⚙️ 設備</button>
+          <button role="tab" data-tab="special">⭐ 特殊</button>
+          <button role="tab" data-tab="achieve">🏆 成就</button>
+        </nav>
+        <div id="qty" class="qty" hidden>
+          <span class="muted">購買數量</span>
+          <button data-qty="1" class="active">×1</button>
+          <button data-qty="10">×10</button>
+          <button data-qty="100">×100</button>
+          <button data-qty="max">MAX</button>
+        </div>
+        <div id="list" class="list"></div>
+      </section>
+
+      <div id="toasts" aria-live="polite"></div>
+      <div id="overlay-root"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
