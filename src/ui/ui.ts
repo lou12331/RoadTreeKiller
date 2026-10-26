@@ -18,6 +18,7 @@ export interface UIHandlers {
   chop: () => void;
   buyAxe: () => void;
   buyEquip: (i: number, qty: number) => void;
+  toggleEquipVisible: (i: number) => void;
   buyUpgrade: (id: string) => void;
   setQuality: (q: Quality) => void;
   setSound: (on: boolean) => void;
@@ -27,6 +28,10 @@ export interface UIHandlers {
   reset: () => void;
   replayIntro: () => void;
 }
+
+const SVG_HEAD = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+const EYE_SVG = `${SVG_HEAD}<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const EYE_OFF_SVG = `${SVG_HEAD}<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg>`;
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 
@@ -314,6 +319,21 @@ export class UIController {
         const { row, ico, desc } = this.row(e.icon, e.name, '');
         const count = el('span', 'count');
         ico.append(count);
+        const eye = el('button', 'eye-btn');
+        eye.type = 'button';
+        const syncEye = (hidden: boolean) => {
+          eye.innerHTML = hidden ? EYE_OFF_SVG : EYE_SVG;
+          eye.classList.toggle('off', hidden);
+          eye.title = hidden ? '顯示此設備' : '隱藏此設備';
+          eye.setAttribute('aria-label', eye.title);
+          eye.setAttribute('aria-pressed', String(hidden));
+        };
+        syncEye(s.hiddenEquip[i]);
+        eye.addEventListener('click', () => {
+          this.h.toggleEquipVisible(i);
+          syncEye(this.state().hiddenEquip[i]);
+        });
+        ico.append(eye);
         const b = this.priceButton('購買', () => this.h.buyEquip(i, this.qty === 'max' ? Infinity : this.qty));
         b.update = (st) => {
           const want = this.qty === 'max' ? Infinity : this.qty;

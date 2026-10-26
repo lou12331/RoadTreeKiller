@@ -39,6 +39,7 @@ const ui = new UIController(
     chop: onChop,
     buyAxe: () => { if (buyAxe(state)) afterBuy(); },
     buyEquip: (i, q) => { if (buyEquip(state, i, q) > 0) afterBuy(); },
+    toggleEquipVisible: (i) => { state.hiddenEquip[i] = !state.hiddenEquip[i]; void saveGame(state); },
     buyUpgrade: (id) => {
       const u = UPGRADES.find((x) => x.id === id);
       if (u && buyUpgrade(state, u)) {
@@ -168,7 +169,7 @@ function frame(now: number) {
     setTimeout(() => ui.ending(state, () => {}, newGamePlus), 3500);
   }
 
-  scene.update(dt, { equipment: state.equipment, dps: ending ? 0 : totalDps(state) });
+  scene.update(dt, { equipment: state.equipment, hidden: state.hiddenEquip, dps: ending ? 0 : totalDps(state) });
   speedLines.update(dt, scene.speedFactor, scene.vanishingPoint());
   setIntensity(scene.speedFactor);
   ui.update(state);

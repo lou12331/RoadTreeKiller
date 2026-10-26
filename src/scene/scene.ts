@@ -416,11 +416,11 @@ export class GameScene {
   }
 
   // ---------- 設備 ----------
-  private stepGear(dt: number, counts: number[], active: boolean) {
+  private stepGear(dt: number, counts: number[], hidden: boolean[], active: boolean) {
     const t = this.time;
     counts.forEach((n, i) => {
       const g = this.gear[i];
-      g.visible = n > 0 && this.mode !== 'intro';
+      g.visible = n > 0 && !hidden[i] && this.mode !== 'intro';
       if (!g.visible) return;
       const k = active ? Math.min(3, 1 + Math.log10(n)) : 0; // 動畫強度
       const u = g.userData;
@@ -520,12 +520,12 @@ export class GameScene {
   }
 
   // ---------- 主更新 ----------
-  update(dt: number, ctx: { equipment: number[]; dps: number }) {
+  update(dt: number, ctx: { equipment: number[]; hidden: boolean[]; dps: number }) {
     this.time += dt;
     this.stepTrees(dt);
     this.stepAxe(dt);
     this.stepChips(dt);
-    this.stepGear(dt, ctx.equipment, ctx.dps > 0 && this.mode === 'play');
+    this.stepGear(dt, ctx.equipment, ctx.hidden, ctx.dps > 0 && this.mode === 'play');
     if (ctx.dps > 0 && this.mode === 'play' && Math.random() < dt * Math.min(8, 1 + Math.log10(ctx.dps))) {
       this.emitChips(1, new THREE.Vector3(0, 0.6 + Math.random() * 0.8, 0.25));
     }

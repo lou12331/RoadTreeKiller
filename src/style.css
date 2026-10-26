@@ -215,6 +215,10 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 .row.done { opacity: 0.65; }
 .row .ico { width: 52px; height: 52px; border-radius: 12px; background: #1a1f25; display: grid; place-items: center; font-size: 28px; position: relative; }
 .row .ico .count { position: absolute; right: -4px; bottom: -4px; background: var(--gold); color: #2a2100; font-size: 11px; font-weight: 900; border-radius: 8px; padding: 1px 5px; }
+.row .ico .eye-btn { position: absolute; left: -5px; top: -5px; width: 22px; height: 22px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 1px solid #3a424b; background: #232a31; color: #cfd6dd; cursor: pointer; }
+.row .ico .eye-btn svg { width: 14px; height: 14px; }
+.row .ico .eye-btn.off { color: #7d8791; background: #15191e; }
+.row .ico .eye-btn:hover { color: #fff; border-color: var(--gold); }
 .row .info { min-width: 0; }
 .row .name { font-weight: 800; font-size: 16px; }
 .row .desc { color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.35; }

@@ -11,6 +11,7 @@ export interface GameState {
   totalGold: number;
   axeLevel: number;
   equipment: number[];
+  hiddenEquip: boolean[]; // 各設備是否在畫面上隱藏
   upgrades: string[];
   achievements: string[];
   news: number[]; // 已顯示過的新聞節點
@@ -38,6 +39,7 @@ export function newState(prev?: Pick<GameState, 'achievements' | 'ngPlus' | 'set
     totalGold: 0,
     axeLevel: 0,
     equipment: EQUIPMENT.map(() => 0),
+    hiddenEquip: EQUIPMENT.map(() => false),
     upgrades: [],
     achievements: prev ? [...prev.achievements] : [],
     news: [],
@@ -62,6 +64,8 @@ export function migrate(raw: unknown): GameState {
   s.settings = { ...base.settings, ...(s.settings ?? {}) };
   const eq = Array.isArray(s.equipment) ? s.equipment : [];
   s.equipment = EQUIPMENT.map((_, i) => Math.max(0, Math.floor(Number(eq[i]) || 0)));
+  const hid = Array.isArray(s.hiddenEquip) ? s.hiddenEquip : [];
+  s.hiddenEquip = EQUIPMENT.map((_, i) => hid[i] === true);
   for (const k of ['felled', 'treeDamage', 'gold', 'totalGold', 'axeLevel', 'clicks', 'playTime', 'ngPlus', 'autoDamage', 'peakTps', 'idleTime'] as const) {
     const v = Number(s[k]);
     s[k] = Number.isFinite(v) && v >= 0 ? v : 0;
