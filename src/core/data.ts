@@ -126,7 +126,7 @@ export const UPGRADES: Upgrade[] = [
   { id: 'mechanize', name: '全面機械化', desc: '初階設備（電鋸、揮斧機、粉碎機）DPS ×5', cost: 250_000, unlock: { equipment: 50 }, unlockText: '持有 50 台設備', effect: { kind: 'dpsMul', value: 5, only: [0, 1, 2] }, icon: ICONS.factory },
   { id: 'meeting', name: '專家會勘', desc: '所有設備 DPS ×3｜移除 56 棵、保留 21 棵', cost: 20_000_000, unlock: { felled: 10_000 }, unlockText: '砍倒 10,000 棵', effect: { kind: 'dpsMul', value: 3 }, icon: ICONS.inspection },
   { id: 'urgent', name: '公共安全考量', desc: '設備砍倒的樹金幣 ×2｜理由萬用，結算加倍', cost: 1_000_000_000, unlock: { felled: 30_000 }, unlockText: '砍倒 30,000 棵', effect: { kind: 'autoGoldMul', value: 2 }, icon: ICONS.clipboard },
-  { id: 'special', name: '依規範辦理', desc: '所有設備 DPS ×10｜規範說可以', cost: 5_000_000_000, unlock: { felled: 60_000 }, unlockText: '砍倒 60,000 棵', effect: { kind: 'dpsMul', value: 10 }, icon: ICONS.regulations },
+  { id: 'special', name: '依規範辦理', desc: '所有設備 DPS ×10｜規範說可以', cost: 2_000_000_000, unlock: { felled: 60_000 }, unlockText: '砍倒 60,000 棵', effect: { kind: 'dpsMul', value: 10 }, icon: ICONS.regulations },
 ];
 
 export interface Achievement {
