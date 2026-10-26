@@ -12,7 +12,7 @@ import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/sa
 import { TICK, advance, autoDamage, chop, settleOffline, type DamageResult } from './core/sim';
 import { newState, type GameState } from './core/state';
 import { GameScene } from './scene/scene';
-import { setSound, sfx, unlockAudio } from './ui/audio';
+import { setIntensity, setSound, sfx, unlockAudio } from './ui/audio';
 import { fmt, fmtInt } from './ui/format';
 import { UIController } from './ui/ui';
 import { Danmaku } from './ui/danmaku';
@@ -170,6 +170,7 @@ function frame(now: number) {
 
   scene.update(dt, { equipment: state.equipment, dps: ending ? 0 : totalDps(state) });
   speedLines.update(dt, scene.speedFactor, scene.vanishingPoint());
+  setIntensity(scene.speedFactor);
   ui.update(state);
   if (now - lastRows > 100) { ui.refreshRows(); lastRows = now; }
   if (now - lastSave > 15000) { lastSave = now; void saveGame(state); }
