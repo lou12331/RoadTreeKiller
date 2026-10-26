@@ -577,4 +577,4 @@ body.intro #speedlines, body.ending #speedlines { display: none; }
 .row.locked .ico > .game-icon { filter: grayscale(1); }
 .icon-silhouette > .game-icon { filter: grayscale(1) brightness(0.7); }
 .buy .price { display: inline-flex; align-items: center; justify-content: center; gap: 3px; }
-.toast .t-ico > .game-icon { width: 28px; height: 28px; }
+.toast .t-ico > .game-icon { width: 30px; height: 30px; }
