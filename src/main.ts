@@ -1,3 +1,4 @@
+import { ICONS } from './core/icons';
 import './style.css';
 import { EQUIPMENT, INTRO_TEXT, INTRO_TEXT_NGPLUS, TARGET_TREES, UPGRADES } from './core/data';
 import { buyAxe, buyEquip, buyUpgrade, totalDps } from './core/economy';
@@ -52,11 +53,11 @@ const ui = new UIController(
     importSave: (text) => {
       try {
         loadState(importSave(text));
-        ui.toast({ icon: '📂', kicker: '存檔', title: '匯入成功' });
+        ui.toast({ icon: ICONS.folder, kicker: '存檔', title: '匯入成功' });
         void saveGame(state);
         return true;
       } catch (e) {
-        ui.toast({ icon: '⚠️', kicker: '存檔', title: '匯入失敗', text: (e as Error).message });
+        ui.toast({ icon: ICONS.warning, kicker: '存檔', title: '匯入失敗', text: (e as Error).message });
         return false;
       }
     },
@@ -101,8 +102,8 @@ function onKills(res: DamageResult, auto: boolean) {
   const now = performance.now();
   if (!auto || now - lastGoldFx > 600) {
     const p = scene.hitScreenPos();
-    const text = pendingKills > 1 ? `+${fmt(pendingGold)} 🪙 ×${fmtInt(pendingKills)}棵` : `+${fmt(pendingGold)} 🪙`;
-    ui.floatText(p.x + 40, p.y - 50, text, pendingKills > 1 ? 'gold big' : 'gold', true);
+    const text = pendingKills > 1 ? `+${fmt(pendingGold)} ×${fmtInt(pendingKills)}棵` : `+${fmt(pendingGold)}`;
+    ui.floatText(p.x + 40, p.y - 50, text, pendingKills > 1 ? 'gold big' : 'gold', true, ICONS.coin);
     pendingGold = 0;
     pendingKills = 0;
     lastGoldFx = now;
@@ -120,10 +121,10 @@ scene.onFell = () => {
 function handleEvents() {
   const ev = checkEvents(state);
   for (const a of ev.achievements) {
-    ui.toast({ icon: a.icon, kicker: '🏆 成就達成', title: a.name, text: a.desc });
+    ui.toast({ icon: a.icon, kicker: '成就達成', kickerIcon: ICONS.trophy, title: a.name, text: a.desc });
   }
   for (const n of ev.news) {
-    ui.toast({ icon: '📰', kicker: '新聞快訊', title: n.title, text: n.body, cls: 'news', timeout: 9000 });
+    ui.toast({ icon: ICONS.news, kicker: '新聞快訊', title: n.title, text: n.body, cls: 'news', timeout: 9000 });
   }
 }
 
@@ -253,7 +254,7 @@ document.addEventListener('visibilitychange', () => {
       }
       scene.setProgress(state.felled);
       if (killed > 0) {
-        ui.toast({ icon: '⏱️', kicker: '背景結算', title: `砍倒 ${fmtInt(killed)} 棵`, text: `獲得 🪙 ${fmt(gold)}` });
+        ui.toast({ icon: ICONS.stopwatch, kicker: '背景結算', title: `砍倒 ${fmtInt(killed)} 棵`, text: `獲得 ${fmt(gold)}`, textIcon: ICONS.coin });
         handleEvents();
       }
     }

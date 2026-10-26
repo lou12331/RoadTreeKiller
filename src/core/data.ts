@@ -1,3 +1,5 @@
+import { ICONS, type IconPath } from './icons';
+
 // 遊戲靜態資料：樹種、成長階段、設備、升級、成就、新聞。
 // 數值依企劃書初版提案，標註「平衡」者為經濟模擬後調整的值。
 
@@ -82,17 +84,17 @@ export interface Equipment {
   cost: number;
   dps: number;
   desc: string;
-  icon: string;
+  icon: IconPath;
 }
 
 export const EQUIPMENT: Equipment[] = [
-  { id: 'chainsaw', name: '電鋸', cost: 50, dps: 1, desc: '樹幹旁持續鋸切', icon: '🪚' },
-  { id: 'autoaxe', name: '自動揮斧機', cost: 500, dps: 8, desc: '機械臂揮斧', icon: '🦾' },
-  { id: 'shredder', name: '樹木粉碎機', cost: 5_000, dps: 60, desc: '旋轉鋸片與木屑', icon: '⚙️' },
-  { id: 'truck', name: '自動伐木車', cost: 50_000, dps: 450, desc: '車輛機械臂', icon: '🚛' },
-  { id: 'drone', name: '伐木無人機', cost: 500_000, dps: 3_500, desc: '空中鋸切（不是替誰開路）', icon: '🛸' },
-  { id: 'laser', name: '雷射伐木砲', cost: 5_000_000, dps: 25_000, desc: '光束切割', icon: '🔫' },
-  { id: 'satellite', name: '軌道伐木衛星', cost: 50_000_000, dps: 180_000, desc: '天空光柱', icon: '🛰️' },
+  { id: 'chainsaw', name: '電鋸', cost: 50, dps: 1, desc: '樹幹旁持續鋸切', icon: ICONS.chainsaw },
+  { id: 'autoaxe', name: '自動揮斧機', cost: 500, dps: 8, desc: '機械臂揮斧', icon: ICONS.autoaxe },
+  { id: 'shredder', name: '樹木粉碎機', cost: 5_000, dps: 60, desc: '旋轉鋸片與木屑', icon: ICONS.shredder },
+  { id: 'truck', name: '自動伐木車', cost: 50_000, dps: 450, desc: '車輛機械臂', icon: ICONS.truck },
+  { id: 'drone', name: '伐木無人機', cost: 500_000, dps: 3_500, desc: '空中鋸切（不是替誰開路）', icon: ICONS.drone },
+  { id: 'laser', name: '雷射伐木砲', cost: 5_000_000, dps: 25_000, desc: '光束切割', icon: ICONS.laser },
+  { id: 'satellite', name: '軌道伐木衛星', cost: 50_000_000, dps: 180_000, desc: '天空光柱', icon: ICONS.satellite },
 ];
 
 export const EQUIP_GROWTH = 1.15;
@@ -113,18 +115,18 @@ export interface Upgrade {
   unlock: { felled?: number; equipment?: number };
   unlockText: string;
   effect: UpgradeEffect;
-  icon: string;
+  icon: IconPath;
 }
 
 export const UPGRADES: Upgrade[] = [
-  { id: 'whetstone', name: '磨刀石', desc: '手動傷害 ×2', cost: 100, unlock: { felled: 10 }, unlockText: '砍倒 10 棵', effect: { kind: 'clickMul', value: 2 }, icon: '🪨' },
-  { id: 'license', name: '最有利標', desc: '設備 DPS +25%｜決標只比預算少 2 元', cost: 1_000, unlock: { felled: 100 }, unlockText: '砍倒 100 棵', effect: { kind: 'dpsMul', value: 1.25 }, icon: '📜' },
-  { id: 'night', name: '夜間施工許可', desc: '設備 DPS ×2', cost: 20_000, unlock: { felled: 1_000 }, unlockText: '砍倒 1,000 棵', effect: { kind: 'dpsMul', value: 2 }, icon: '🌙' },
-  { id: 'budget', name: '計點制度上線', desc: '金幣收益 ×2｜移除一棵最高 8 點，樹穴維護 0.2 點', cost: 150_000, unlock: { felled: 3_000 }, unlockText: '砍倒 3,000 棵', effect: { kind: 'goldMul', value: 2 }, icon: '💰' },
-  { id: 'mechanize', name: '全面機械化', desc: '初階設備（電鋸、揮斧機、粉碎機）DPS ×5', cost: 250_000, unlock: { equipment: 50 }, unlockText: '持有 50 台設備', effect: { kind: 'dpsMul', value: 5, only: [0, 1, 2] }, icon: '🏭' },
-  { id: 'meeting', name: '專家會勘', desc: '所有設備 DPS ×3｜移除 56 棵、保留 21 棵', cost: 20_000_000, unlock: { felled: 10_000 }, unlockText: '砍倒 10,000 棵', effect: { kind: 'dpsMul', value: 3 }, icon: '🏛️' },
-  { id: 'urgent', name: '公共安全考量', desc: '設備砍倒的樹金幣 ×2｜理由萬用，結算加倍', cost: 1_000_000_000, unlock: { felled: 30_000 }, unlockText: '砍倒 30,000 棵', effect: { kind: 'autoGoldMul', value: 2 }, icon: '📋' },
-  { id: 'special', name: '依規範辦理', desc: '所有設備 DPS ×10｜規範說可以', cost: 5_000_000_000, unlock: { felled: 60_000 }, unlockText: '砍倒 60,000 棵', effect: { kind: 'dpsMul', value: 10 }, icon: '🏦' },
+  { id: 'whetstone', name: '磨刀石', desc: '手動傷害 ×2', cost: 100, unlock: { felled: 10 }, unlockText: '砍倒 10 棵', effect: { kind: 'clickMul', value: 2 }, icon: ICONS.whetstone },
+  { id: 'license', name: '最有利標', desc: '設備 DPS +25%｜決標只比預算少 2 元', cost: 1_000, unlock: { felled: 100 }, unlockText: '砍倒 100 棵', effect: { kind: 'dpsMul', value: 1.25 }, icon: ICONS.tender },
+  { id: 'night', name: '夜間施工許可', desc: '設備 DPS ×2', cost: 20_000, unlock: { felled: 1_000 }, unlockText: '砍倒 1,000 棵', effect: { kind: 'dpsMul', value: 2 }, icon: ICONS.night },
+  { id: 'budget', name: '計點制度上線', desc: '金幣收益 ×2｜移除一棵最高 8 點，樹穴維護 0.2 點', cost: 150_000, unlock: { felled: 3_000 }, unlockText: '砍倒 3,000 棵', effect: { kind: 'goldMul', value: 2 }, icon: ICONS.moneybag },
+  { id: 'mechanize', name: '全面機械化', desc: '初階設備（電鋸、揮斧機、粉碎機）DPS ×5', cost: 250_000, unlock: { equipment: 50 }, unlockText: '持有 50 台設備', effect: { kind: 'dpsMul', value: 5, only: [0, 1, 2] }, icon: ICONS.factory },
+  { id: 'meeting', name: '專家會勘', desc: '所有設備 DPS ×3｜移除 56 棵、保留 21 棵', cost: 20_000_000, unlock: { felled: 10_000 }, unlockText: '砍倒 10,000 棵', effect: { kind: 'dpsMul', value: 3 }, icon: ICONS.inspection },
+  { id: 'urgent', name: '公共安全考量', desc: '設備砍倒的樹金幣 ×2｜理由萬用，結算加倍', cost: 1_000_000_000, unlock: { felled: 30_000 }, unlockText: '砍倒 30,000 棵', effect: { kind: 'autoGoldMul', value: 2 }, icon: ICONS.clipboard },
+  { id: 'special', name: '依規範辦理', desc: '所有設備 DPS ×10｜規範說可以', cost: 5_000_000_000, unlock: { felled: 60_000 }, unlockText: '砍倒 60,000 棵', effect: { kind: 'dpsMul', value: 10 }, icon: ICONS.regulations },
 ];
 
 export interface Achievement {
@@ -134,25 +136,25 @@ export interface Achievement {
   felled?: number;
   equipId?: string;
   clicks?: number;
-  icon: string;
+  icon: IconPath;
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: 'first', name: '第一滴樹汁', desc: '砍倒第 1 棵樹', felled: 1, icon: '💧' },
-  { id: 'hundred', name: '這只是開始', desc: '砍倒 100 棵樹', felled: 100, icon: '🌿' },
-  { id: 'k1', name: '行道樹管理員', desc: '砍倒 1,000 棵樹', felled: 1_000, icon: '🪓' },
-  { id: 'y2024', name: '去年的量', desc: '砍倒 1,425 棵樹（2024 年全市移除數）', felled: 1_425, icon: '📅' },
-  { id: 'y2025', name: '今年的量', desc: '砍倒 3,164 棵樹（2025 年全市移除數）', felled: 3_164, icon: '📈' },
-  { id: 'rumor4k', name: '網傳的量', desc: '砍倒 4,000 棵樹（網路流傳的數字，已被官方駁斥）', felled: 4_000, icon: '📱' },
-  { id: 'replant', name: '種回來了嗎？', desc: '砍倒 13,225 棵樹（市府公布的新植株數）', felled: 13_225, icon: '🌱' },
-  { id: 'k10', name: '人行道拓寬計畫', desc: '砍倒 10,000 棵樹', felled: 10_000, icon: '🚧' },
-  { id: 'k50', name: '你確定嗎？', desc: '砍倒 50,000 棵樹', felled: 50_000, icon: '❓' },
-  { id: 'all', name: '一棵不留', desc: '砍倒 92,776 棵樹', felled: TARGET_TREES, icon: '🏁' },
-  { id: 'saw', name: '文明的聲音', desc: '購買第一台電鋸', equipId: 'chainsaw', icon: '🪚' },
-  { id: 'drone', name: '替無人機開路', desc: '購買第一台無人機（本成就涉及謠言，已報警蒐證）', equipId: 'drone', icon: '🛸' },
-  { id: 'sat', name: '科技始終來自人性', desc: '購買第一台衛星', equipId: 'satellite', icon: '🛰️' },
-  { id: 'click1k', name: '腱鞘炎預備', desc: '點擊「砍！」1,000 次', clicks: 1_000, icon: '👆' },
-  { id: 'click10k', name: '人肉電鋸', desc: '點擊「砍！」10,000 次', clicks: 10_000, icon: '💪' },
+  { id: 'first', name: '第一滴樹汁', desc: '砍倒第 1 棵樹', felled: 1, icon: ICONS.sap },
+  { id: 'hundred', name: '這只是開始', desc: '砍倒 100 棵樹', felled: 100, icon: ICONS.branch },
+  { id: 'k1', name: '行道樹管理員', desc: '砍倒 1,000 棵樹', felled: 1_000, icon: ICONS.axe },
+  { id: 'y2024', name: '去年的量', desc: '砍倒 1,425 棵樹（2024 年全市移除數）', felled: 1_425, icon: ICONS.calendar },
+  { id: 'y2025', name: '今年的量', desc: '砍倒 3,164 棵樹（2025 年全市移除數）', felled: 3_164, icon: ICONS.trend },
+  { id: 'rumor4k', name: '網傳的量', desc: '砍倒 4,000 棵樹（網路流傳的數字，已被官方駁斥）', felled: 4_000, icon: ICONS.phone },
+  { id: 'replant', name: '種回來了嗎？', desc: '砍倒 13,225 棵樹（市府公布的新植株數）', felled: 13_225, icon: ICONS.seedling },
+  { id: 'k10', name: '人行道拓寬計畫', desc: '砍倒 10,000 棵樹', felled: 10_000, icon: ICONS.barrier },
+  { id: 'k50', name: '你確定嗎？', desc: '砍倒 50,000 棵樹', felled: 50_000, icon: ICONS.question },
+  { id: 'all', name: '一棵不留', desc: '砍倒 92,776 棵樹', felled: TARGET_TREES, icon: ICONS.finish },
+  { id: 'saw', name: '文明的聲音', desc: '購買第一台電鋸', equipId: 'chainsaw', icon: ICONS.chainsaw },
+  { id: 'drone', name: '替無人機開路', desc: '購買第一台無人機（本成就涉及謠言，已報警蒐證）', equipId: 'drone', icon: ICONS.drone },
+  { id: 'sat', name: '科技始終來自人性', desc: '購買第一台衛星', equipId: 'satellite', icon: ICONS.satellite },
+  { id: 'click1k', name: '腱鞘炎預備', desc: '點擊「砍！」1,000 次', clicks: 1_000, icon: ICONS.tap },
+  { id: 'click10k', name: '人肉電鋸', desc: '點擊「砍！」10,000 次', clicks: 10_000, icon: ICONS.muscle },
 ];
 
 // 新聞快訊：在新聞中出現過的數字觸發（2024 年移除 1,425 棵、2025 年 3,164 棵、議員質疑一任 5,819 棵、

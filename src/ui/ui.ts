@@ -1,3 +1,5 @@
+import { ICONS, type IconPath } from '../core/icons';
+import { iconHtml } from './icons';
 import { ACHIEVEMENTS, EQUIPMENT, PHASES, TARGET_TREES, UPGRADES } from '../core/data';
 import {
   axeCost, bulkEquip, clickDamage, equipmentDps, equipmentMultiplier, totalDps, upgradeUnlocked,
@@ -265,16 +267,18 @@ export class UIController {
 
   private priceButton(label: string, onClick: () => void): RowRefs & { buy: HTMLButtonElement } {
     const buy = el('button', 'buy');
-    const price = el('span', 'price');
+    const priceBox = el('span', 'price', iconHtml(ICONS.coin, true));
+    const price = el('span', 'value');
+    priceBox.append(price);
     const lab = el('span', 'label', label);
-    buy.append(price, lab);
+    buy.append(priceBox, lab);
     buy.addEventListener('click', onClick);
     return { buy, price, label: lab, update: () => {} };
   }
 
-  private row(icon: string, name: string, desc: string, cls = ''): { row: HTMLElement; ico: HTMLElement; desc: HTMLElement } {
+  private row(icon: IconPath, name: string, desc: string, cls = ''): { row: HTMLElement; ico: HTMLElement; desc: HTMLElement } {
     const row = el('div', 'row ' + cls);
-    const ico = el('div', 'ico', icon);
+    const ico = el('div', 'ico', iconHtml(icon));
     const info = el('div', 'info');
     const d = el('div', 'desc', desc);
     info.append(el('div', 'name', name), d);
@@ -288,11 +292,11 @@ export class UIController {
     this.rows = [];
 
     if (this.tab === 'axe') {
-      const { row, desc } = this.row('🪓', '強化斧頭', '');
+      const { row, desc } = this.row(ICONS.axe, '強化斧頭', '');
       const b = this.priceButton('升級', () => this.h.buyAxe());
       b.update = (st) => {
         const c = axeCost(st.axeLevel);
-        b.price!.textContent = `🪙 ${fmt(c)}`;
+        b.price!.textContent = fmt(c);
         b.buy.disabled = st.gold < c;
         desc.innerHTML = `Lv. ${st.axeLevel} · 每次點擊造成 <b>${fmt(clickDamage(st))}</b> 點傷害`;
       };
@@ -300,7 +304,7 @@ export class UIController {
       list.append(row);
       this.rows.push(b);
       list.append(el('div', 'section-title', '提示'));
-      list.append(el('div', 'row', `<div class="ico">💡</div><div class="info"><div class="desc">斧頭每升一級 +1 手動傷害。購買「設備」可以在你不點擊時持續砍樹，離線時也會以 50% 效率運作（最長 8 小時）。<span class="desktop-only"><br>桌面版可按 <b>空白鍵</b> 或 <b>A–Z</b> 任一字母鍵砍伐。</span></div></div>`));
+      list.append(el('div', 'row', `<div class="ico">${iconHtml(ICONS.bulb)}</div><div class="info"><div class="desc">斧頭每升一級 +1 手動傷害。購買「設備」可以在你不點擊時持續砍樹，離線時也會以 50% 效率運作（最長 8 小時）。<span class="desktop-only"><br>桌面版可按 <b>空白鍵</b> 或 <b>A–Z</b> 任一字母鍵砍伐。</span></div></div>`));
     }
 
     if (this.tab === 'equip') {
@@ -316,7 +320,7 @@ export class UIController {
           const { count: c, cost } = bulkEquip(st, i, want);
           const n2 = this.qty === 'max' ? Math.max(1, c) : c;
           const price = this.qty === 'max' && c === 0 ? bulkEquip(st, i, 1).cost : cost;
-          b.price!.textContent = `🪙 ${fmt(price)}`;
+          b.price!.textContent = fmt(price);
           b.label!.textContent = this.qty === 1 ? '購買' : `購買 ×${n2}`;
           b.buy.disabled = price > st.gold || (this.qty === 'max' && c === 0);
           count.textContent = st.equipment[i] ? String(st.equipment[i]) : '';
@@ -329,7 +333,7 @@ export class UIController {
         this.rows.push(b);
       }
       if (n < EQUIPMENT.length) {
-        list.append(el('div', 'row locked', `<div class="ico">❔</div><div class="info"><div class="name">？？？</div><div class="desc">累積更多金幣以解鎖下一種設備</div></div>`));
+        list.append(el('div', 'row locked', `<div class="ico icon-silhouette">${iconHtml(ICONS.question)}</div><div class="info"><div class="name">？？？</div><div class="desc">累積更多金幣以解鎖下一種設備</div></div>`));
       }
     }
 
@@ -338,11 +342,11 @@ export class UIController {
       const open = UPGRADES.filter((u) => !s.upgrades.includes(u.id));
       for (const u of open) {
         const unlocked = upgradeUnlocked(s, u);
-        const { row } = this.row(unlocked ? u.icon : '🔒', unlocked ? u.name : '尚未解鎖', unlocked ? u.desc : `解鎖條件：${u.unlockText}`, unlocked ? '' : 'locked');
+        const { row } = this.row(unlocked ? u.icon : ICONS.lock, unlocked ? u.name : '尚未解鎖', unlocked ? u.desc : `解鎖條件：${u.unlockText}`, unlocked ? '' : 'locked');
         if (unlocked) {
           const b = this.priceButton('購買', () => this.h.buyUpgrade(u.id));
           b.update = (st) => {
-            b.price!.textContent = `🪙 ${fmt(u.cost)}`;
+            b.price!.textContent = fmt(u.cost);
             b.buy.disabled = st.gold < u.cost;
           };
           row.append(b.buy);
@@ -360,21 +364,22 @@ export class UIController {
       list.append(el('div', 'section-title', `已達成 ${s.achievements.length} / ${ACHIEVEMENTS.length}`));
       for (const a of ACHIEVEMENTS) {
         const got = s.achievements.includes(a.id);
-        list.append(this.row(got ? a.icon : '🔒', got ? a.name : '？？？', a.desc, got ? '' : 'locked').row);
+        list.append(this.row(got ? a.icon : ICONS.lock, got ? a.name : '？？？', a.desc, got ? '' : 'locked').row);
       }
     }
     this.refreshRows();
   }
 
   // ---------- 浮動數字 ----------
-  floatText(x: number, y: number, text: string, cls = '', force = false) {
+  floatText(x: number, y: number, text: string, cls = '', force = false, icon?: IconPath) {
     const now = performance.now();
     if (!force && now - this.lastFx < 40) return; // 限制視覺更新頻率
     this.lastFx = now;
     const d = this.fxPool[this.fxCursor];
     this.fxCursor = (this.fxCursor + 1) % this.fxPool.length;
     d.className = 'dmg ' + cls;
-    d.textContent = text;
+    d.replaceChildren(document.createTextNode(text));
+    if (icon) d.insertAdjacentHTML('beforeend', ' ' + iconHtml(icon, true));
     d.style.left = `${x + (Math.random() - 0.5) * 60}px`;
     d.style.top = `${y + (Math.random() - 0.5) * 30}px`;
     d.style.display = 'none';
@@ -383,11 +388,18 @@ export class UIController {
   }
 
   // ---------- 通知 ----------
-  toast(opts: { icon: string; kicker: string; title: string; text?: string; cls?: string; timeout?: number }) {
+  toast(opts: { icon: IconPath; kicker: string; kickerIcon?: IconPath; title: string; text?: string; textIcon?: IconPath; cls?: string; timeout?: number }) {
     const t = el('div', 'toast ' + (opts.cls ?? ''));
-    t.innerHTML = `<div class="t-ico">${opts.icon}</div><div class="t-body"><div class="t-kicker">${opts.kicker}</div><div class="t-title"></div>${opts.text ? '<div class="t-text"></div>' : ''}</div><button class="t-close" aria-label="關閉">✕</button>`;
+    t.innerHTML = `<div class="t-ico">${iconHtml(opts.icon)}</div><div class="t-body"><div class="t-kicker"></div><div class="t-title"></div>${opts.text ? '<div class="t-text"></div>' : ''}</div><button class="t-close" aria-label="關閉">✕</button>`;
+    const kicker = t.querySelector('.t-kicker')!;
+    kicker.textContent = opts.kicker;
+    if (opts.kickerIcon) kicker.insertAdjacentHTML('afterbegin', iconHtml(opts.kickerIcon, true) + ' ');
     t.querySelector('.t-title')!.textContent = opts.title;
-    if (opts.text) t.querySelector('.t-text')!.textContent = opts.text;
+    if (opts.text) {
+      const text = t.querySelector('.t-text')!;
+      text.textContent = opts.text;
+      if (opts.textIcon) text.insertAdjacentHTML('afterbegin', iconHtml(opts.textIcon, true) + ' ');
+    }
     const box = $('toasts');
     while (box.children.length >= 2) box.firstElementChild!.remove();
     box.appendChild(t);
@@ -491,9 +503,9 @@ export class UIController {
   offlineReport(seconds: number, killed: number, gold: number) {
     const o = this.overlay('', `
       <div class="modal">
-        <h2>歡迎回來 👷</h2>
+        <h2>歡迎回來 ${iconHtml(ICONS.worker)}</h2>
         <p>你離開了 <b>${fmtDuration(seconds)}</b>。</p>
-        <p>設備在你不在時以 50% 效率持續運作，砍倒了 <b>${fmtInt(killed)}</b> 棵樹，賺進 <b style="color:var(--gold)">🪙 ${fmt(gold)}</b>。</p>
+        <p>設備在你不在時以 50% 效率持續運作，砍倒了 <b>${fmtInt(killed)}</b> 棵樹，賺進 <b style="color:var(--gold)">${iconHtml(ICONS.coin, true)} ${fmt(gold)}</b>。</p>
         <p class="muted" style="font-size:13px">離線收益最長計算 8 小時。</p>
         <div class="btn-row" style="grid-template-columns:1fr"><button class="btn primary" data-ok>繼續砍</button></div>
       </div>`);
@@ -564,7 +576,7 @@ export class UIController {
     o.querySelector('[data-export]')!.addEventListener('click', async () => {
       ta.value = this.h.exportSave();
       ta.select();
-      try { await navigator.clipboard.writeText(ta.value); this.toast({ icon: '📋', kicker: '存檔', title: '已複製到剪貼簿' }); } catch { /* 手動複製 */ }
+      try { await navigator.clipboard.writeText(ta.value); this.toast({ icon: ICONS.clipboard, kicker: '存檔', title: '已複製到剪貼簿' }); } catch { /* 手動複製 */ }
     });
     o.querySelector('[data-import]')!.addEventListener('click', () => {
       if (ta.value.trim() && this.h.importSave(ta.value)) o.remove();
@@ -600,11 +612,11 @@ export class UIController {
         <div class="line" style="animation-delay:0.2s">恭喜你，終於把所有樹都砍光了。</div>
         <div class="line" style="animation-delay:1.6s">雖然沒有人知道為什麼。</div>
         <div class="notice" style="animation-delay:3.4s">
-          <div class="kicker">📢 市府公告</div>
+          <div class="kicker">${iconHtml(ICONS.megaphone, true)} 市府公告</div>
           為落實永續發展政策，市府宣布啟動 <b>92,776</b> 棵路樹復育計畫。
         </div>
         <div class="end-stats" style="animation-delay:5s">
-          <div class="kicker">📊 伐木紀錄</div>
+          <div class="kicker">${iconHtml(ICONS.chart, true)} 伐木紀錄</div>
           <div class="stats-grid">
             <span>手動砍伐</span><b>${fmtInt(s.clicks)} 次</b>
             <span>自動傷害</span><b>${fmt(s.autoDamage)}</b>
@@ -616,7 +628,7 @@ export class UIController {
         <div class="line by-the-way" style="animation-delay:7s">順便說一下，<br>92,776，是臺北市行道樹的總數。</div>
         <div class="actions" style="animation-delay:8.6s">
           <button class="btn-secondary" data-quit>結束遊戲</button>
-          <button class="btn-primary" data-ng>🌱 開始種樹</button>
+          <button class="btn-primary" data-ng>${iconHtml(ICONS.seedling, true)} 開始種樹</button>
         </div>
       </div>`);
     o.querySelector('[data-quit]')!.addEventListener('click', () => {
@@ -624,9 +636,9 @@ export class UIController {
       onQuit();
       const m = this.overlay('', `
         <div class="modal" style="max-width:360px">
-          <h2>🏁 遊戲結束</h2>
+          <h2>${iconHtml(ICONS.finish, true)} 遊戲結束</h2>
           <p class="muted">街道很安靜。陽光很刺眼。</p>
-          <div class="btn-row"><button class="btn" data-back>回到街景</button><button class="btn primary" data-ng>🌱 開始種樹</button></div>
+          <div class="btn-row"><button class="btn" data-back>回到街景</button><button class="btn primary" data-ng>${iconHtml(ICONS.seedling, true)} 開始種樹</button></div>
         </div>`);
       m.querySelector('[data-back]')!.addEventListener('click', () => m.remove());
       m.querySelector('[data-ng]')!.addEventListener('click', () => { m.remove(); onNewGame(); });

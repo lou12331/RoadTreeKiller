@@ -568,3 +568,13 @@ body.intro #speedlines, body.ending #speedlines { display: none; }
 .modal.about .author { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; font-size: 17px; }
 .modal.about .fb-link { display: inline-flex; border-radius: 50%; transition: transform 0.15s; }
 .modal.about .fb-link:hover { transform: scale(1.1); }
+
+/* Shared transparent inventory art: inline icons follow text size. */
+.game-icon { display: inline-block; width: 1.3em; height: 1.3em; object-fit: contain; vertical-align: -0.2em; flex: none; pointer-events: none; user-select: none; }
+.hud-icon .game-icon, .chop-icon .game-icon { width: 1.5em; height: 1.5em; vertical-align: middle; }
+.icon-btn .game-icon { width: 30px; height: 30px; vertical-align: middle; }
+.row .ico > .game-icon { width: 100%; height: 100%; }
+.row.locked .ico > .game-icon { filter: grayscale(1); }
+.icon-silhouette > .game-icon { filter: grayscale(1) brightness(0.7); }
+.buy .price { display: inline-flex; align-items: center; justify-content: center; gap: 3px; }
+.toast .t-ico > .game-icon { width: 28px; height: 28px; }

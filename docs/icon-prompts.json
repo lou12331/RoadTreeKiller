@@ -1,0 +1,180 @@
+{
+  "mode": "Built-in image_gen; transparent_background=true",
+  "style": "Use case: stylized-concept. Asset type: single transparent game inventory icon for a dark Taiwanese black-comedy tree-cutting idle game. Style: bold cartoon sticker, clean chunky dark brown outline with a thin warm cream outer rim, saturated colors, flat two-tone cel shading, small upper-left highlight. Centered, subject fills 80% of square, simple silhouette legible at 16–32px. No background, no ground, no cast shadow, no frame, no watermark. True alpha transparency. Subject: ",
+  "coinPrompt": "Use case: stylized-concept. Asset type: single transparent game inventory icon for a dark Taiwanese black-comedy tree-cutting idle game. Subject: one golden round coin, front face embossed with a single simple leaf symbol. Style: bold cartoon sticker, clean chunky dark brown outline with a thin warm cream outer rim, saturated gold and amber, flat two-tone cel shading, small upper-left highlight. Centered, subject fills 80% of square, silhouette extremely legible at 16px. No background, no ground, no cast shadow, no frame, no lettering, no watermark, no extra objects. True alpha transparency.",
+  "subjects": [
+    {
+      "id": "tree",
+      "subject": "One complete street tree with a rounded lush green crown and warm brown trunk."
+    },
+    {
+      "id": "settings",
+      "subject": "One single silver-blue gear, minimal UI silhouette, no tools."
+    },
+    {
+      "id": "axe",
+      "subject": "One upgraded single-bladed axe, wooden handle and bright silver cutting edge."
+    },
+    {
+      "id": "upgrades",
+      "subject": "One bold axe with a large bright upward green arrow beside it."
+    },
+    {
+      "id": "equipment",
+      "subject": "One silver wrench crossed over a blue gear, clearly different from a plain gear."
+    },
+    {
+      "id": "star",
+      "subject": "One chunky gold five-point star."
+    },
+    {
+      "id": "trophy",
+      "subject": "One gold trophy cup with two handles and a small warm brown base."
+    },
+    {
+      "id": "chainsaw",
+      "subject": "One orange engine-powered chainsaw with silver toothed chain bar, compact simple silhouette."
+    },
+    {
+      "id": "autoaxe",
+      "subject": "One chunky orange industrial robotic arm grasping a wooden-handled axe."
+    },
+    {
+      "id": "shredder",
+      "subject": "One silver circular toothed saw blade with three golden woodchips spraying outward; no gear or machine housing."
+    },
+    {
+      "id": "truck",
+      "subject": "One compact teal logging truck fitted with a crane arm and timber grapple carrying a brown log."
+    },
+    {
+      "id": "drone",
+      "subject": "One teal quadcopter with four orange rotors carrying a circular silver saw underneath, absolutely no UFO."
+    },
+    {
+      "id": "laser",
+      "subject": "One mounted futuristic teal logging beam cannon firing a short vivid red beam diagonally downward. Not a pistol or handgun."
+    },
+    {
+      "id": "satellite",
+      "subject": "One silver and gold orbital satellite with two blue solar panels, firing a short golden column of light downward."
+    },
+    {
+      "id": "whetstone",
+      "subject": "One rectangular light gray sharpening stone with a tiny orange spark."
+    },
+    {
+      "id": "tender",
+      "subject": "One warm ivory government tender scroll with a bold red seal containing the exact Traditional Chinese text \"決標\". No other text."
+    },
+    {
+      "id": "night",
+      "subject": "One golden crescent moon beside a simple orange traffic cone with a lit amber warning beacon."
+    },
+    {
+      "id": "moneybag",
+      "subject": "One tied golden money bag with a single leaf emblem."
+    },
+    {
+      "id": "factory",
+      "subject": "One compact teal industrial factory with two orange chimneys and a single silver gear."
+    },
+    {
+      "id": "inspection",
+      "subject": "One ivory official civic building with three simple columns and a teal roof."
+    },
+    {
+      "id": "clipboard",
+      "subject": "One ivory clipboard with a silver clip and a large yellow triangular safety warning symbol. No writing."
+    },
+    {
+      "id": "regulations",
+      "subject": "One thick navy law book with gold page edges and a chunky red rubber stamp. No lettering."
+    },
+    {
+      "id": "sap",
+      "subject": "One single large amber-gold teardrop of tree sap, not blue, no objects."
+    },
+    {
+      "id": "branch",
+      "subject": "One short fresh green leafy twig with three leaves."
+    },
+    {
+      "id": "calendar",
+      "subject": "One simple ivory calendar with red binding and exact large numerals \"2024\". No other text."
+    },
+    {
+      "id": "trend",
+      "subject": "One simple ivory chart card with a thick green rising zigzag line and exact numerals \"2025\" along the bottom."
+    },
+    {
+      "id": "phone",
+      "subject": "One teal smartphone with a yellow speech balloon containing a single large red question mark."
+    },
+    {
+      "id": "seedling",
+      "subject": "One tiny bright green two-leaf seedling emerging from a small warm brown clump of soil."
+    },
+    {
+      "id": "barrier",
+      "subject": "One orange and ivory striped road construction barricade on two feet."
+    },
+    {
+      "id": "question",
+      "subject": "One large chunky warm ivory question mark with amber side shading."
+    },
+    {
+      "id": "finish",
+      "subject": "One black-and-ivory checkered finish flag on a short silver pole, broad bold squares."
+    },
+    {
+      "id": "tap",
+      "subject": "One cartoon hand with extended index finger tapping upward, two small amber click rays."
+    },
+    {
+      "id": "muscle",
+      "subject": "One flexed cartoon muscular arm with a small white bandage around the forearm."
+    },
+    {
+      "id": "folder",
+      "subject": "One open golden file folder with one ivory document inside. No writing."
+    },
+    {
+      "id": "warning",
+      "subject": "One bright yellow triangular warning sign with a large dark exclamation mark."
+    },
+    {
+      "id": "news",
+      "subject": "One folded ivory newspaper with bold dark headline blocks and a simple green tree thumbnail. No readable text."
+    },
+    {
+      "id": "stopwatch",
+      "subject": "One silver-blue stopwatch with a golden top button and large simple dark hands."
+    },
+    {
+      "id": "bulb",
+      "subject": "One glowing yellow light bulb with a silver base, two short orange light rays."
+    },
+    {
+      "id": "lock",
+      "subject": "One silver-gray closed padlock with a bold keyhole, simple silhouette."
+    },
+    {
+      "id": "worker",
+      "subject": "One friendly cartoon worker head wearing a vivid yellow construction hard hat, no body."
+    },
+    {
+      "id": "megaphone",
+      "subject": "One white and red handheld megaphone with two bold amber sound rays."
+    },
+    {
+      "id": "chart",
+      "subject": "One simple three-column bar chart, green blue and gold bars on an ivory base."
+    },
+    {
+      "id": "coin-small",
+      "subject": "One single gold coin, straight-on round disc, thick amber border, one bold embossed leaf silhouette. Extremely minimal flat design specifically for a 16px UI icon. No sparkles, no secondary details, no lettering."
+    }
+  ],
+  "assembly": "Each prompt = style + subject, except coin uses coinPrompt."
+}
