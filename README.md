@@ -6,6 +6,8 @@
 
 遊戲以 TypeScript、Three.js 和 Vite 製作，成品是純靜態網站，不需要後端。
 
+本專案為開源專案，以 [MIT License](LICENSE) 授權，歡迎 fork、修改與學習。
+
 ## 玩法
 
 1. 點「砍！」或直接點 3D 畫面砍樹，賺取金幣。
@@ -87,3 +89,7 @@ public/    圖示、favicon、PWA 圖片
 - **3D 模型**：七種樹（榕樹、樟樹、小葉欖仁、阿勃勒、楓香、茄苳、臺灣欒樹）、斧頭、設備都用程式產生的低面數幾何（共用 Geometry/Material、InstancedMesh），沒有 GLB 檔，首屏不用額外下載。
 - **音效與音樂**：全部由 WebAudio 即時合成，不載入音檔；8-bit 風格背景音樂在高速砍伐時會淡入第二層編制。
 - **圖示**：43 種透明 PNG 由 ImageGen 生成，載入時預載並暫存。提示詞與處理方式見 [docs/icons.md](docs/icons.md)，縮放腳本為 `scripts/prepare-icons.py`。
+
+## 授權
+
+以 [MIT License](LICENSE) 釋出。程式碼、AI 產製的圖示與程式生成的模型音效皆可自由使用，保留授權聲明即可。

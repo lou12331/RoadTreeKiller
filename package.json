@@ -1,6 +1,7 @@
 {
   "name": "road-tree-killer-92776",
   "private": true,
+  "license": "MIT",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
