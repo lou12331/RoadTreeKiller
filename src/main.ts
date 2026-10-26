@@ -1,5 +1,10 @@
-import { ICONS } from './core/icons';
+import { ICONS, preloadImages } from './core/icons';
+import avatarImg from './assets/avatar.webp';
+import briefingImg from './assets/briefing.webp';
+import logoImg from './assets/logo.webp';
 import './style.css';
+
+preloadImages([logoImg, briefingImg, avatarImg]);
 import { EQUIPMENT, INTRO_TEXT, INTRO_TEXT_NGPLUS, TARGET_TREES, UPGRADES } from './core/data';
 import { buyAxe, buyEquip, buyUpgrade, totalDps } from './core/economy';
 import { checkEvents } from './core/events';

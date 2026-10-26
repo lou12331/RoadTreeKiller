@@ -46,3 +46,21 @@ export const ICONS = {
 } as const;
 
 export type IconPath = typeof ICONS[keyof typeof ICONS];
+
+// 保留 Image 參照，確保瀏覽器在整個執行期間都把圖片留在記憶體快取中
+const preloaded: HTMLImageElement[] = [];
+
+/** 網頁載入一開始就把所有圖示（大圖與小圖）與內建圖片暫存起來。 */
+export function preloadImages(extra: string[] = []): void {
+  const base = import.meta.env.BASE_URL;
+  const urls = [
+    ...Object.values(ICONS).flatMap((p) => [p, p.replace('icons/', 'icons/small/')].map((s) => base + s)),
+    ...extra,
+  ];
+  for (const url of urls) {
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = url;
+    preloaded.push(img);
+  }
+}
